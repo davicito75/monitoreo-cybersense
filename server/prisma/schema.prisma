@@ -14,7 +14,7 @@ model Check {
   latencyMs Int?
   error     String?
   createdAt DateTime @default(now())
-  monitor   Monitor  @relation("checks", fields: [monitorId], references: [id])
+  Monitor   Monitor  @relation(fields: [monitorId], references: [id])
 }
 
 model Incident {
@@ -23,14 +23,14 @@ model Incident {
   startedAt DateTime
   endedAt   DateTime?
   status    String
-  monitor   Monitor   @relation("incidents", fields: [monitorId], references: [id])
+  Monitor   Monitor   @relation(fields: [monitorId], references: [id])
 }
 
 model MaintenanceMonitor {
   maintenanceId     Int
   monitorId         Int
-  maintenanceWindow MaintenanceWindow @relation("monitors", fields: [maintenanceId], references: [id], onDelete: Cascade)
-  monitor           Monitor           @relation("maintenanceMonitors", fields: [monitorId], references: [id])
+  MaintenanceWindow MaintenanceWindow @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+  Monitor           Monitor           @relation(fields: [monitorId], references: [id])
 
   @@id([maintenanceId, monitorId])
 }
@@ -43,7 +43,7 @@ model MaintenanceWindow {
   endTime            DateTime
   createdAt          DateTime             @default(now())
   updatedAt          DateTime
-  monitors           MaintenanceMonitor[] @relation("monitors")
+  MaintenanceMonitor MaintenanceMonitor[]
 }
 
 model Monitor {
@@ -69,12 +69,12 @@ model Monitor {
   sslValid           Boolean?
   displayOrder       Int                  @default(0)
   createdAt          DateTime             @default(now())
-  checks             Check[]              @relation("checks")
-  incidents          Incident[]           @relation("incidents")
-  maintenanceMonitors MaintenanceMonitor[] @relation("maintenanceMonitors")
-  stats              MonitorStats[]       @relation("stats")
-  tags               MonitorTag[]         @relation("tags")
-  userMonitors       UserMonitor[]        @relation("userMonitors")
+  Check              Check[]
+  Incident           Incident[]
+  MaintenanceMonitor MaintenanceMonitor[]
+  MonitorStats       MonitorStats[]
+  MonitorTag         MonitorTag[]
+  UserMonitor        UserMonitor[]
 }
 
 model MonitorStats {
@@ -90,7 +90,7 @@ model MonitorStats {
   uptime       Float    @default(0.0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime
-  monitor      Monitor  @relation("stats", fields: [monitorId], references: [id], onDelete: Cascade)
+  Monitor      Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
 
   @@unique([monitorId, date])
   @@index([monitorId, date])
@@ -100,8 +100,8 @@ model MonitorTag {
   monitorId Int
   tagId     Int
   createdAt DateTime @default(now())
-  monitor   Monitor  @relation("tags", fields: [monitorId], references: [id], onDelete: Cascade)
-  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  Monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  Tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([monitorId, tagId])
 }
@@ -132,7 +132,7 @@ model PushSubscription {
   p256dh    String
   auth      String
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
 
   @@unique([endpoint, userId])
 }
@@ -142,7 +142,7 @@ model Tag {
   name       String       @unique
   color      String       @default("#3B82F6")
   createdAt  DateTime     @default(now())
-  monitorTags MonitorTag[]
+  MonitorTag MonitorTag[]
 }
 
 model User {
@@ -153,16 +153,16 @@ model User {
   pushbulletToken  String?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime
-  pushSubscriptions PushSubscription[]
-  userMonitors      UserMonitor[]
+  PushSubscription PushSubscription[]
+  UserMonitor      UserMonitor[]
 }
 
 model UserMonitor {
   userId    Int
   monitorId Int
   createdAt DateTime @default(now())
-  monitor   Monitor  @relation("userMonitors", fields: [monitorId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
+  Monitor   Monitor  @relation(fields: [monitorId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
 
   @@id([userId, monitorId])
 }
