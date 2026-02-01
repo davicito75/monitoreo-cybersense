@@ -35,8 +35,8 @@ export async function listIncidents(req: Request, res: Response) {
 
   if (user.role !== 'ADMIN') {
     // load assigned monitor ids from UserMonitor model (explicit model)
-  const assigned: any[] = await (prisma as any)['userMonitor'].findMany({ where: { userId: user.id }, select: { monitorId: true } });
-  const assignedIds = assigned.map((a: any) => a.monitorId);
+    const assigned: any[] = await (prisma as any)['userMonitor'].findMany({ where: { userId: user.id }, select: { monitorId: true } });
+    const assignedIds = assigned.map((a: any) => a.monitorId);
     if (assignedIds.length === 0) {
       return res.json({ page, pageSize, total: 0, items: [] });
     }
@@ -55,7 +55,7 @@ export async function listIncidents(req: Request, res: Response) {
     orderBy: { startedAt: 'desc' },
     take: pageSize,
     skip: (page - 1) * pageSize,
-    include: { 
+    include: {
       monitor: {
         include: {
           checks: {

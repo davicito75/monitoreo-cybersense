@@ -14,7 +14,7 @@ model Check {
   latencyMs Int?
   error     String?
   createdAt DateTime @default(now())
-  Monitor   Monitor  @relation(fields: [monitorId], references: [id])
+  monitor   Monitor  @relation(fields: [monitorId], references: [id])
 }
 
 model Incident {
@@ -23,14 +23,14 @@ model Incident {
   startedAt DateTime
   endedAt   DateTime?
   status    String
-  Monitor   Monitor   @relation(fields: [monitorId], references: [id])
+  monitor   Monitor   @relation(fields: [monitorId], references: [id])
 }
 
 model MaintenanceMonitor {
   maintenanceId     Int
   monitorId         Int
-  MaintenanceWindow MaintenanceWindow @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
-  Monitor           Monitor           @relation(fields: [monitorId], references: [id])
+  maintenanceWindow MaintenanceWindow @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+  monitor           Monitor           @relation(fields: [monitorId], references: [id])
 
   @@id([maintenanceId, monitorId])
 }
@@ -43,7 +43,7 @@ model MaintenanceWindow {
   endTime            DateTime
   createdAt          DateTime             @default(now())
   updatedAt          DateTime
-  MaintenanceMonitor MaintenanceMonitor[]
+  monitors           MaintenanceMonitor[]
 }
 
 model Monitor {
@@ -69,12 +69,12 @@ model Monitor {
   sslValid           Boolean?
   displayOrder       Int                  @default(0)
   createdAt          DateTime             @default(now())
-  Check              Check[]
-  Incident           Incident[]
-  MaintenanceMonitor MaintenanceMonitor[]
-  MonitorStats       MonitorStats[]
-  MonitorTag         MonitorTag[]
-  UserMonitor        UserMonitor[]
+  checks             Check[]
+  incidents          Incident[]
+  maintenanceMonitors MaintenanceMonitor[]
+  stats              MonitorStats[]
+  tags               MonitorTag[]
+  userMonitors       UserMonitor[]
 }
 
 model MonitorStats {
@@ -90,7 +90,7 @@ model MonitorStats {
   uptime       Float    @default(0.0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime
-  Monitor      Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  monitor      Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
 
   @@unique([monitorId, date])
   @@index([monitorId, date])
@@ -100,8 +100,8 @@ model MonitorTag {
   monitorId Int
   tagId     Int
   createdAt DateTime @default(now())
-  Monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
-  Tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([monitorId, tagId])
 }
@@ -132,7 +132,7 @@ model PushSubscription {
   p256dh    String
   auth      String
   createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@unique([endpoint, userId])
 }
@@ -142,7 +142,7 @@ model Tag {
   name       String       @unique
   color      String       @default("#3B82F6")
   createdAt  DateTime     @default(now())
-  MonitorTag MonitorTag[]
+  monitorTags MonitorTag[]
 }
 
 model User {
@@ -153,16 +153,16 @@ model User {
   pushbulletToken  String?
   createdAt        DateTime           @default(now())
   updatedAt        DateTime
-  PushSubscription PushSubscription[]
-  UserMonitor      UserMonitor[]
+  pushSubscriptions PushSubscription[]
+  userMonitors      UserMonitor[]
 }
 
 model UserMonitor {
   userId    Int
   monitorId Int
   createdAt DateTime @default(now())
-  Monitor   Monitor  @relation(fields: [monitorId], references: [id])
-  User      User     @relation(fields: [userId], references: [id])
+  monitor   Monitor  @relation(fields: [monitorId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@id([userId, monitorId])
 }

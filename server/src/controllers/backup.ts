@@ -119,12 +119,12 @@ export async function restoreDatabase(req: Request, res: Response) {
       for (const monitorTag of data.monitorTags) {
         const newMonitorId = monitorMap[monitorTag.monitorId];
         const newTagId = tagMap[monitorTag.tagId];
-        
+
         if (!newMonitorId) {
           console.warn(`[restore] Skipping monitorTag for monitor ${monitorTag.monitorId} - monitor not restored`);
           continue;
         }
-        
+
         if (!newTagId) {
           console.warn(`[restore] Skipping monitorTag for tag ${monitorTag.tagId} - tag not restored`);
           continue;
@@ -153,7 +153,7 @@ export async function restoreDatabase(req: Request, res: Response) {
         status: check.status,
         createdAt: check.createdAt ? new Date(check.createdAt) : new Date(),
       };
-      
+
       // Only add optional fields if they exist
       if (check.latencyMs !== undefined && check.latencyMs !== null) checkData.latencyMs = check.latencyMs;
       if (check.error !== undefined && check.error !== null) checkData.error = check.error;
@@ -205,13 +205,14 @@ export async function restoreDatabase(req: Request, res: Response) {
             downCount: stat.downCount || 0,
             totalChecks: stat.totalChecks || 0,
             uptime: stat.uptime || 0.0,
+            updatedAt: stat.updatedAt ? new Date(stat.updatedAt) : new Date(),
           },
         });
         statsRestored++;
       }
     }
 
-    res.json({ 
+    res.json({
       message: 'Restore successful',
       restored: {
         monitors: data.monitors.length,
