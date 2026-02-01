@@ -14,10 +14,11 @@ export function init(): void {
     return;
   }
 
-  const publicKey = process.env.VAPID_PUBLIC;
-  const privateKey = process.env.VAPID_PRIVATE;
+  const publicKey = process.env.VAPID_PUBLIC_KEY;
+  const privateKey = process.env.VAPID_PRIVATE_KEY;
+  const subject = process.env.VAPID_SUBJECT || 'mailto:admin@local';
   if (publicKey && privateKey) {
-    webpush.setVapidDetails('mailto:admin@local', publicKey, privateKey);
+    webpush.setVapidDetails(subject, publicKey, privateKey);
     console.log('[webpush] configured');
   } else {
     console.warn('[webpush] VAPID keys not configured; push will fail');

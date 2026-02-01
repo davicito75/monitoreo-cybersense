@@ -45,16 +45,17 @@ app.use('/api/admin', adminRoutes);
 app.post('/api/logs', logsCtrl.createLog);
 app.use('/api/incidents', incidentsRoutes);
 
+// expose VAPID public key to client
+app.get('/vapidPublicKey', (req, res) => {
+  const pushEnabled = (process.env.PUSH_ENABLED || 'false').toLowerCase() === 'true';
+  if (!pushEnabled) return res.json({ publicKey: null });
+  res.json({ publicKey: process.env.VAPID_PUBLIC_KEY || null });
+});
+
 // Serve frontend static (single-port mode) if built
 const webDist = path.join(__dirname, '..', '..', 'web', 'dist');
 if (require('fs').existsSync(webDist)) {
   app.use(express.static(webDist));
-  // expose VAPID public key to client
-  app.get('/vapidPublicKey', (req, res) => {
-    const pushEnabled = (process.env.PUSH_ENABLED || 'false').toLowerCase() === 'true';
-    if (!pushEnabled) return res.json({ publicKey: null });
-    res.json({ publicKey: process.env.VAPID_PUBLIC || null });
-  });
   app.get('*', (req, res) => {
     res.sendFile(path.join(webDist, 'index.html'));
   });
