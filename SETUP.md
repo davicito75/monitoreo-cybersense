@@ -2,7 +2,19 @@
 
 Esta guía te guía a través de la instalación completa de Cybersense en un servidor vacío.
 
-## Opción A: VPS Remoto (Ubuntu/Debian)
+## Opción A: Vercel + Supabase (Recomendado para Producción)
+
+Despliegue serverless sin configuración de servidor:
+
+👉 **[Leer DEPLOY_GUIDE.md](DEPLOY_GUIDE.md)**
+
+**Ventajas:**
+- Sin configuración de servidor
+- Escalado automático
+- SSL incluido
+- Despliegue desde GitHub
+
+## Opción B: VPS Remoto (Ubuntu/Debian)
 
 Usa la guía completa en [DEPLOYMENT.md](DEPLOYMENT.md)
 
@@ -16,7 +28,7 @@ Usa la guía completa en [DEPLOYMENT.md](DEPLOYMENT.md)
 7. SSL con Let's Encrypt
 8. Acceder a `https://tu-dominio.com`
 
-## Opción B: Desarrollo Local (Windows/Mac/Linux)
+## Opción C: Desarrollo Local (Windows/Mac/Linux)
 
 ### Paso 1: Requisitos Previos
 
@@ -85,6 +97,8 @@ cd ..
 
 ### Paso 5: Configurar Base de Datos
 
+**Para desarrollo local (SQLite):**
+
 ```bash
 cd server
 
@@ -102,6 +116,10 @@ ls -la dev.db
 
 cd ..
 ```
+
+**Para producción (PostgreSQL/Supabase):**
+
+Ver [DEPLOY_GUIDE.md](DEPLOY_GUIDE.md) para configuración con Supabase.
 
 ### Paso 6: Construir para Producción (Opcional)
 
@@ -127,7 +145,7 @@ pnpm --filter web dev
 # Login: admin@local / Admin123! (o tu contraseña configurada)
 ```
 
-## Opción C: Docker (Próximamente)
+## Opción D: Docker (Próximamente)
 
 Se está trabajando en Dockerfile para deployment con Docker.
 
@@ -210,7 +228,9 @@ Checklist para confirmar que todo funciona:
 
 1. **Customizar**: Edita `.env` con tus valores
 2. **Monitorear**: Crea monitores para tus servicios
-3. **Producción**: Sigue [DEPLOYMENT.md](DEPLOYMENT.md) para VPS
+3. **Producción**: 
+   - **Vercel (Recomendado)**: Sigue [DEPLOY_GUIDE.md](DEPLOY_GUIDE.md)
+   - **VPS Tradicional**: Sigue [DEPLOYMENT.md](DEPLOYMENT.md)
 4. **Contribuir**: Lee [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Necesitas Ayuda?

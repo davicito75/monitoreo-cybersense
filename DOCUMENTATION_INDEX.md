@@ -239,6 +239,14 @@ pm2 monit
 → [CLEANUP_SUMMARY.md](CLEANUP_SUMMARY.md)
 
 ### ¿Cómo genero las variables de .env?
+| Documento | Descripción | Audiencia |
+|-----------|-------------|-----------|
+| **[README.md](README.md)** | Visión general del proyecto, inicio rápido, arquitectura | Todos |
+| **[SETUP.md](SETUP.md)** | Instalación paso a paso en desarrollo local | Nuevos desarrolladores |
+| **[DEPLOY_GUIDE.md](DEPLOY_GUIDE.md)** | Despliegue en Vercel con Supabase (Producción) | DevOps/Deployment |
+| **[DEPLOYMENT.md](DEPLOYMENT.md)** | Despliegue en VPS con Nginx y PM2 | DevOps/SysAdmin |
+| **[CONTRIBUTING.md](CONTRIBUTING.md)** | Convenciones de código, tests, pull requests | Desarrolladores |
+| **[DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)** | Este archivo - índice de toda la documentación | Todos |
 → [SETUP.md](SETUP.md) - Paso 3
 
 ### ¿Cómo configuro HTTPS?

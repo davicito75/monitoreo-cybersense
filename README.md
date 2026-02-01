@@ -11,11 +11,11 @@ Proyecto MVP "lite" para monitoreo de servicios (HTTP, TCP, Ping fallback, DNS) 
 | **[CONTRIBUTING.md](CONTRIBUTING.md)** | Desarrolladores | Convenciones de código, tests, pull requests |
 | **[CLEANUP_SUMMARY.md](CLEANUP_SUMMARY.md)** | Revisor del código | Cambios realizados, seguridad, estructura |
 
-## �📋 Requisitos
+## 📋 Requisitos
 
 - **Node.js**: 18+
 - **Package Manager**: pnpm (recomendado) o npm
-- **Base de Datos**: SQLite (incluida)
+- **Base de Datos**: PostgreSQL (Supabase para producción, SQLite para desarrollo local)
 
 ## 🚀 Inicio Rápido (Desarrollo Local)
 
@@ -122,7 +122,7 @@ monitoreo/
 
 **Backend:**
 - Express.js
-- Prisma ORM + SQLite
+- Prisma ORM + PostgreSQL (Supabase) / SQLite (desarrollo local)
 - JWT para autenticación
 - Web Push (VAPID)
 - p-limit para concurrencia
@@ -187,7 +187,22 @@ pnpm run format
 
 ## 📦 Deployment
 
-Para instalar en **VPS (Ubuntu/Debian) con Nginx y PM2**:
+### Opción 1: Vercel (Recomendado para Producción)
+
+Despliegue serverless con Supabase como base de datos:
+
+👉 **[Leer DEPLOY_GUIDE.md](DEPLOY_GUIDE.md)**
+
+**Características:**
+- Despliegue automático desde GitHub
+- Base de datos PostgreSQL (Supabase)
+- SSL automático
+- Escalado automático
+- Sin configuración de servidor
+
+### Opción 2: VPS Tradicional (Ubuntu/Debian)
+
+Para instalación en servidor propio con Nginx y PM2:
 
 👉 **[Leer DEPLOYMENT.md](DEPLOYMENT.md)**
 
@@ -222,7 +237,7 @@ Incluye:
 - **Autenticación**: JWT en Authorization header. Para producción se recomienda cookies httpOnly + CSRF.
 - **Scheduler**: Ciclo central que consulta todos los monitores y ejecuta checks con límite de concurrencia (p-limit). Evita setInterval por monitor y escala mejor.
 - **Ping**: Implementado como TCP connect a puerto 443 (fallback seguro).
-- **Base de Datos**: SQLite para MVP. Migrar a PostgreSQL si se requiere escalar.
+- **Base de Datos**: PostgreSQL (Supabase) para producción. SQLite disponible para desarrollo local.
 
 ## 🚧 Limitaciones y Próximos Pasos
 
