@@ -10,7 +10,7 @@
     "dev:web": "pnpm --filter web dev",
     "dev": "pnpm --filter server dev & pnpm --filter web dev",
     "build": "pnpm --filter server build && pnpm --filter web build",
-    "vercel-build": "npx prisma generate --schema=./server/prisma/schema.prisma && pnpm --filter server build && pnpm --filter web build && rm -rf public && mv web/dist public",
+    "vercel-build": "pnpm --filter server run prisma:generate && pnpm --filter server build && pnpm --filter web build && rm -rf public && mv web/dist public",
     "build:server": "pnpm --filter server build",
     "build:web": "pnpm --filter web build",
     "start:mono": "pnpm -w run -s build && node server/dist/app.js",
