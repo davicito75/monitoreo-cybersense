@@ -17,6 +17,7 @@
     "run:pm2:logs": "npx pm2 logs",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
+    "postinstall": "prisma generate",
     "seed": "ts-node ./prisma/seed.ts"
   },
   "dependencies": {
