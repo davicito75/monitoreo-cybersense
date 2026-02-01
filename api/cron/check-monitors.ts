@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import prisma from '../../server/src/db/client';
-import { executeCheck } from '../../server/src/services/checks';
+import { executeCheck } from '../../server/src/services/executeCheck';
 import pLimit from 'p-limit';
 
 /**
@@ -10,7 +10,7 @@ import pLimit from 'p-limit';
  * Configured in vercel.json to run every minute
  * Protected with CRON_SECRET environment variable
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Verify cron secret to prevent unauthorized access
     const authHeader = req.headers.authorization;
     const expectedSecret = process.env.CRON_SECRET;
@@ -32,11 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Get all active monitors
         const monitors = await prisma.monitor.findMany({
             where: {
-                active: true,
-                paused: false
-            },
-            include: {
-                tags: true
+                isPaused: false
             }
         });
 
@@ -68,8 +64,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         );
 
         const results = await Promise.all(checkPromises);
-        const successCount = results.filter(r => r.success).length;
-        const failCount = results.filter(r => !r.success).length;
+        const successCount = results.filter((r: any) => r.success).length;
+        const failCount = results.filter((r: any) => !r.success).length;
 
         const duration = Date.now() - startTime;
         console.log(`[CRON] Completed: ${successCount} success, ${failCount} failed, ${duration}ms`);
