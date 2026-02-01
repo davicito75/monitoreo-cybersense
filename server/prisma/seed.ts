@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-const bcrypt = require('bcryptjs');
+// @ts-ignore
+import bcrypt from 'bcryptjs';
 import dotenv from 'dotenv';
 
 dotenv.config();

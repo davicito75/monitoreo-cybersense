@@ -50,5 +50,8 @@
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6",
     "zod": "^4.3.5"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
