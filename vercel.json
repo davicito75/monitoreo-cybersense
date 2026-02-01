@@ -6,20 +6,8 @@
             "destination": "/api/index"
         },
         {
-            "source": "/assets/(.*)",
-            "destination": "/web/dist/assets/$1"
-        },
-        {
-            "source": "/favicon.svg",
-            "destination": "/web/dist/favicon.svg"
-        },
-        {
-            "source": "/sw.js",
-            "destination": "/web/dist/sw.js"
-        },
-        {
             "source": "/(.*)",
-            "destination": "/web/dist/index.html"
+            "destination": "/index.html"
         }
     ]
 }
