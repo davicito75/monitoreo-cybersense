@@ -1,0 +1,14 @@
+{
+  "apps": [
+    {
+      "name": "monitoreo-web",
+      "script": "npm",
+      "args": "run start",
+      "cwd": "d:\\Proyectos\\monitoreo\\monitoreo\\web",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}

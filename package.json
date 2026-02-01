@@ -1,0 +1,23 @@
+{
+  "name": "monitoreo-mono",
+  "private": true,
+  "workspaces": [
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev:server": "pnpm --filter server dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev": "pnpm -w run -s dev:server & pnpm -w run -s dev:web",
+    "build": "pnpm -w run -s build:server && pnpm -w run -s build:web",
+    "build:server": "pnpm --filter server build",
+    "build:web": "pnpm --filter web build",
+    "start:mono": "pnpm -w run -s build && node server/dist/app.js",
+    "start:server": "pnpm --filter server start",
+    "start:web": "pnpm --filter web start",
+    "start": "pnpm -w run -s start:server & pnpm -w run -s start:web"
+  },
+  "devDependencies": {
+    "playwright": "^1.57.0"
+  }
+}

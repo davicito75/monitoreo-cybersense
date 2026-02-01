@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+	--uk-accent:#3b82f6; /* blue-500 */
+	--uk-accent-2:#f97316; /* orange */
+	--uk-bg:#0b1220; /* dark background for sidebar */
+}
+
+
+body { @apply bg-gray-100 text-gray-800; }
+.app-container { @apply max-w-6xl mx-auto p-6; }
+.card { @apply bg-white shadow rounded p-4; }
+.btn { @apply bg-uk text-white px-3 py-1 rounded hover:brightness-95; }
+.btn-secondary { @apply bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300; }
+
+/* Sidebar specific */
+.sidebar { background-color: var(--uk-bg); color: #e6eef8; }
+.sidebar .w-10 { background-color: var(--uk-accent); }
+.sidebar button:hover { background-color: rgba(255,255,255,0.04); }
+
+/* Smooth collapse transition */
+.sidebar { transition: width 200ms ease; }
+
+/* Chart container */
+.chart-wrapper { height: 220px; }
+
+.status-up { @apply text-green-600 font-semibold; }
+.status-down { @apply text-red-600 font-semibold; }
+

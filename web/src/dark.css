@@ -1,0 +1,61 @@
+/* Simple dark mode overrides applied when document.documentElement has class 'dark' */
+.dark body { background-color: #071018; color: #e6eef8; }
+.dark .card { background-color: #0f1724; color: #dbeafe; }
+.dark .btn-secondary { background-color: #1f2937; color: #e5e7eb; }
+.dark .topbar { background-color: #0b1220; color: #e6eef8; }
+.dark .sidebar { background-color: #050812; color: #cfe9ff; }
+.dark .bg-white { background-color: #0f1724 !important; }
+.dark .text-gray-500 { color: #9ca3af !important; }
+.dark .bg-gray-50 { background-color: #071018 !important; }
+.dark .bg-gray-100 { background-color: #071018 !important; }
+
+/* Form elements */
+.dark input,
+.dark textarea,
+.dark select {
+	background-color: #0b1220;
+	color: #e6eef8;
+	border: 1px solid #213245;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+	color: #98a8bf;
+}
+.dark .border {
+	border-color: #213245 !important;
+}
+.dark .card .p-3,
+.dark .card .p-4,
+.dark .card .p-6 {
+	background-color: #0b1220;
+}
+
+/* Buttons */
+.dark .btn {
+	background-color: #2563eb;
+	color: #ffffff;
+}
+.dark .btn-secondary {
+	background-color: #1f2937;
+	color: #e5e7eb;
+	border: 1px solid #2b3746;
+}
+
+/* Tables */
+.dark table th {
+	background-color: #071026;
+	color: #cfe9ff;
+	border-bottom: 1px solid #213245;
+}
+.dark table td {
+	border-bottom: 1px solid #0e2436;
+	color: #dbeafe;
+}
+
+/* Misc readability */
+.dark .text-gray-600 { color: #a7b5c9 !important; }
+.dark .text-gray-700 { color: #c4d6ea !important; }
+.dark .text-gray-400 { color: #8fa5bf !important; }
+.dark .overlay-40 { background-color: rgba(15, 23, 36, 0.4) !important; }
+/* Tailwind uses classes like bg-black/40 in markup; escape the slash for safety */
+.dark .bg-black\/40 { background-color: rgba(0,0,0,0.4) !important; }
