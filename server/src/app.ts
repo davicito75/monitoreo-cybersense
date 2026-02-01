@@ -46,8 +46,9 @@ app.use('/api/admin', adminRoutes);
 app.post('/api/logs', logsCtrl.createLog);
 app.use('/api/incidents', incidentsRoutes);
 
-// expose VAPID public key to client
-app.get('/vapidPublicKey', (req, res) => {
+
+// expose VAPID public key to client (under /api for Vercel routing)
+app.get('/api/vapidPublicKey', (req, res) => {
   const pushEnabled = (process.env.PUSH_ENABLED || 'false').toLowerCase() === 'true';
   if (!pushEnabled) return res.json({ publicKey: null });
   res.json({ publicKey: process.env.VAPID_PUBLIC_KEY || null });

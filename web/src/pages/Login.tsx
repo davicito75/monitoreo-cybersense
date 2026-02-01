@@ -47,13 +47,13 @@ export default function LoginPage({ onLogin }: { onLogin: () => void }) {
           }
           if (Notification.permission === 'granted' && 'PushManager' in window) {
             // fetch VAPID public key exposed by the server
-                const keyRes = await fetch('/vapidPublicKey');
-                if (keyRes.ok) {
-                  const { publicKey } = await keyRes.json();
-                  // If server returns publicKey === null, push is intentionally disabled
-                  if (publicKey === null) {
-                    console.log('[push] Push disabled by server (publicKey=null) — skipping auto-subscribe');
-                  } else if (publicKey) {
+            const keyRes = await fetch('/api/vapidPublicKey');
+            if (keyRes.ok) {
+              const { publicKey } = await keyRes.json();
+              // If server returns publicKey === null, push is intentionally disabled
+              if (publicKey === null) {
+                console.log('[push] Push disabled by server (publicKey=null) — skipping auto-subscribe');
+              } else if (publicKey) {
                 function urlBase64ToUint8Array(base64String: string) {
                   const padding = '='.repeat((4 - base64String.length % 4) % 4);
                   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -139,7 +139,7 @@ export default function LoginPage({ onLogin }: { onLogin: () => void }) {
             <svg className="animate-spin h-4 w-4 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path></svg>
             {t('login.button')}...
           </>
-  ) : t('login.button')}
+        ) : t('login.button')}
       </button>
     </form>
   );
