@@ -7,169 +7,162 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model User {
-  id                  Int      @id @default(autoincrement())
-  email               String   @unique
-  passwordHash        String
-  role                String   @default("READ_ONLY")
-  pushbulletToken     String?  // Optional Pushbullet token per user
-  createdAt           DateTime @default(now())
-  subscriptions       PushSubscription[]
-  userMonitors        UserMonitor[]
-}
-
-model Monitor {
-  id            Int      @id @default(autoincrement())
-  name          String
-  type          String      // "http", "tcp", "dns", "ping", "mssql"
-  urlOrHost     String
-  port          Int?
-  intervalSec   Int      @default(60)
-  retries       Int      @default(1)
-  timeoutMs     Int      @default(5000)
-  expectedStatus Int?    
-  contentRegex  String?
-  // MSSQL specific fields
-  mssqlUsername String?
-  mssqlPassword String?
-  mssqlDatabase String?
-  mssqlQuery    String?
-  // HTTP/HTTPS specific
-  notifyOnDown  Boolean  @default(true)
-  isPaused      Boolean  @default(false)
-  sslCertExpiry DateTime?
-  sslDaysUntilExpiry Int?
-  sslIssuer     String?
-  sslValid      Boolean?
-  displayOrder  Int      @default(0) // For UI ordering/drag-drop
-  createdAt     DateTime @default(now())
-  checks        Check[]
-  stats         MonitorStats[]
-  incidents     Incident[]
-  userMonitors  UserMonitor[]
-  maintenances  MaintenanceMonitor[]
-  tags          MonitorTag[]
-}
-
-model UserMonitor {
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
-  monitor   Monitor @relation(fields: [monitorId], references: [id])
-  monitorId Int
-  createdAt DateTime @default(now())
-
-  @@id([userId, monitorId])
-}
-
 model Check {
-  id         Int      @id @default(autoincrement())
-  monitor    Monitor  @relation(fields: [monitorId], references: [id])
-  monitorId  Int
-  status     String
-  latencyMs  Int?
-  error      String?
-  createdAt  DateTime @default(now())
-}
-
-model MonitorStats {
-  id                Int      @id @default(autoincrement())
-  monitor           Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
-  monitorId         Int
-  date              DateTime // YYYY-MM-DD (stored at 00:00:00)
-  avgLatencyMs      Int?     // Promedio de latencia en ms para ese día
-  minLatencyMs      Int?
-  maxLatencyMs      Int?
-  upCount           Int      @default(0)
-  downCount         Int      @default(0)
-  totalChecks       Int      @default(0)
-  uptime            Float    @default(0.0) // Porcentaje (0-100)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  
-  @@unique([monitorId, date])
-  @@index([monitorId, date])
+  id        Int      @id @default(autoincrement())
+  monitorId Int
+  status    String
+  latencyMs Int?
+  error     String?
+  createdAt DateTime @default(now())
+  Monitor   Monitor  @relation(fields: [monitorId], references: [id])
 }
 
 model Incident {
-  id         Int      @id @default(autoincrement())
-  monitor    Monitor  @relation(fields: [monitorId], references: [id])
-  monitorId  Int
-  startedAt  DateTime
-  endedAt    DateTime?
-  status     String
-}
-
-model PushSubscription {
-  id       Int    @id @default(autoincrement())
-  user     User   @relation(fields: [userId], references: [id])
-  userId   Int
-  endpoint String
-  p256dh   String
-  auth     String
-  createdAt DateTime @default(now())
-
-  @@unique([endpoint, userId], name: "endpoint_userId")
-}
-
-model MaintenanceWindow {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?
-  startTime   DateTime
-  endTime     DateTime
-  monitors    MaintenanceMonitor[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  monitorId Int
+  startedAt DateTime
+  endedAt   DateTime?
+  status    String
+  Monitor   Monitor   @relation(fields: [monitorId], references: [id])
 }
 
 model MaintenanceMonitor {
-  maintenance   MaintenanceWindow @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
-  maintenanceId Int
-  monitor       Monitor           @relation(fields: [monitorId], references: [id])
-  monitorId     Int
+  maintenanceId     Int
+  monitorId         Int
+  MaintenanceWindow MaintenanceWindow @relation(fields: [maintenanceId], references: [id], onDelete: Cascade)
+  Monitor           Monitor           @relation(fields: [monitorId], references: [id])
 
   @@id([maintenanceId, monitorId])
 }
 
-model Tag {
-  id        Int         @id @default(autoincrement())
-  name      String      @unique
-  color     String      @default("#3B82F6")  // Default blue
-  monitors  MonitorTag[]
-  createdAt DateTime    @default(now())
+model MaintenanceWindow {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  description        String?
+  startTime          DateTime
+  endTime            DateTime
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime
+  MaintenanceMonitor MaintenanceMonitor[]
+}
+
+model Monitor {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  type               String
+  urlOrHost          String
+  port               Int?
+  intervalSec        Int                  @default(60)
+  retries            Int                  @default(1)
+  timeoutMs          Int                  @default(5000)
+  expectedStatus     Int?
+  contentRegex       String?
+  mssqlUsername      String?
+  mssqlPassword      String?
+  mssqlDatabase      String?
+  mssqlQuery         String?
+  notifyOnDown       Boolean              @default(true)
+  isPaused           Boolean              @default(false)
+  sslCertExpiry      DateTime?
+  sslDaysUntilExpiry Int?
+  sslIssuer          String?
+  sslValid           Boolean?
+  displayOrder       Int                  @default(0)
+  createdAt          DateTime             @default(now())
+  Check              Check[]
+  Incident           Incident[]
+  MaintenanceMonitor MaintenanceMonitor[]
+  MonitorStats       MonitorStats[]
+  MonitorTag         MonitorTag[]
+  UserMonitor        UserMonitor[]
+}
+
+model MonitorStats {
+  id           Int      @id @default(autoincrement())
+  monitorId    Int
+  date         DateTime
+  avgLatencyMs Int?
+  minLatencyMs Int?
+  maxLatencyMs Int?
+  upCount      Int      @default(0)
+  downCount    Int      @default(0)
+  totalChecks  Int      @default(0)
+  uptime       Float    @default(0.0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+  Monitor      Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+
+  @@unique([monitorId, date])
+  @@index([monitorId, date])
 }
 
 model MonitorTag {
-  monitor   Monitor @relation(fields: [monitorId], references: [id], onDelete: Cascade)
   monitorId Int
-  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
   tagId     Int
   createdAt DateTime @default(now())
+  Monitor   Monitor  @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  Tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id([monitorId, tagId])
 }
+
 model NotificationConfig {
-  id                    Int       @id @default(autoincrement())
-  // Web Push settings
-  pushEnabled           Boolean   @default(true)
-  // Notification preferences
-  notifyOnDown          Boolean   @default(true)
-  notifyOnUp            Boolean   @default(true)
-  notifyOnSlowResponse  Boolean   @default(true)
-  notifyOnSSLExpiry     Boolean   @default(true)
-  sslExpiryDays         Int       @default(30)  // Notify when SSL expires within N days
-  // Sound and visual settings
-  soundEnabled          Boolean   @default(true)
-  badgeEnabled          Boolean   @default(true)
-  // Rate limiting
-  quietHoursEnabled     Boolean   @default(false)
-  quietHoursStart       String?   // HH:mm format, e.g., "22:00"
-  quietHoursEnd         String?   // HH:mm format, e.g., "08:00"
-  // Pushbullet settings
-  pushbulletEnabled     Boolean   @default(false)
-  pushbulletToken       String?   // Pushbullet API token
-  // Additional config
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  id                   Int      @id @default(autoincrement())
+  pushEnabled          Boolean  @default(true)
+  notifyOnDown         Boolean  @default(true)
+  notifyOnUp           Boolean  @default(true)
+  notifyOnSlowResponse Boolean  @default(true)
+  notifyOnSSLExpiry    Boolean  @default(true)
+  sslExpiryDays        Int      @default(30)
+  soundEnabled         Boolean  @default(true)
+  badgeEnabled         Boolean  @default(true)
+  quietHoursEnabled    Boolean  @default(false)
+  quietHoursStart      String?
+  quietHoursEnd        String?
+  pushbulletEnabled    Boolean  @default(false)
+  pushbulletToken      String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime
+}
+
+model PushSubscription {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  endpoint  String
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+
+  @@unique([endpoint, userId])
+}
+
+model Tag {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  color      String       @default("#3B82F6")
+  createdAt  DateTime     @default(now())
+  MonitorTag MonitorTag[]
+}
+
+model User {
+  id               Int                @id @default(autoincrement())
+  email            String             @unique
+  passwordHash     String
+  role             String             @default("READ_ONLY")
+  pushbulletToken  String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime
+  PushSubscription PushSubscription[]
+  UserMonitor      UserMonitor[]
+}
+
+model UserMonitor {
+  userId    Int
+  monitorId Int
+  createdAt DateTime @default(now())
+  Monitor   Monitor  @relation(fields: [monitorId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
+
+  @@id([userId, monitorId])
 }
