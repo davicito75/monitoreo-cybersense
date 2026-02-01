@@ -28,3 +28,4 @@ server/playwright-temp-user-data/
 .env.*.local
 *.pid
 *.log.json
+.vercel

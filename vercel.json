@@ -3,16 +3,23 @@
     "rewrites": [
         {
             "source": "/api/(.*)",
-            "destination": "/server/api/index.ts"
+            "destination": "/api/index"
+        },
+        {
+            "source": "/assets/(.*)",
+            "destination": "/web/dist/assets/$1"
+        },
+        {
+            "source": "/favicon.svg",
+            "destination": "/web/dist/favicon.svg"
+        },
+        {
+            "source": "/sw.js",
+            "destination": "/web/dist/sw.js"
         },
         {
             "source": "/(.*)",
-            "destination": "/web/index.html"
+            "destination": "/web/dist/index.html"
         }
-    ],
-    "functions": {
-        "server/api/index.ts": {
-            "includeFiles": "server/**"
-        }
-    }
+    ]
 }
