@@ -8,8 +8,9 @@
   "scripts": {
     "dev:server": "pnpm --filter server dev",
     "dev:web": "pnpm --filter web dev",
-    "dev": "pnpm -w run -s dev:server & pnpm -w run -s dev:web",
-    "build": "pnpm -w run -s build:server && pnpm -w run -s build:web",
+    "dev": "pnpm --filter server dev & pnpm --filter web dev",
+    "build": "pnpm --filter server build && pnpm --filter web build",
+    "vercel-build": "pnpm --filter server build && pnpm --filter web build",
     "build:server": "pnpm --filter server build",
     "build:web": "pnpm --filter web build",
     "start:mono": "pnpm -w run -s build && node server/dist/app.js",
