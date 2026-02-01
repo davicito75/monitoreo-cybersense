@@ -66,13 +66,16 @@ const host = process.env.HOST || '0.0.0.0';
 
 const httpServer = http.createServer(app);
 
-httpServer.listen(port, host, async () => {
-  console.log(`Server listening on ${host}:${port}`);
-  notifications.init();
-  pushbullet.init();
-  scheduler.start();
-  dailyStats.start();
-  initWebSocketServer(httpServer);
-});
+// Only start server if running directly (not when imported by Vercel)
+if (require.main === module) {
+  httpServer.listen(port, host, async () => {
+    console.log(`Server listening on ${host}:${port}`);
+    notifications.init();
+    pushbullet.init();
+    scheduler.start();
+    dailyStats.start();
+    initWebSocketServer(httpServer);
+  });
+}
 
 export default app;
